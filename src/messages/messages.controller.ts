@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
 import { Message } from "./Message";
 import { MessageDto } from "./MessageDto";
 import { MessagesService } from "./messages.service";
@@ -12,8 +12,8 @@ export class MessagesController {
     return this.messsagesService.findAll();
   }
   @Get(":id")
-  findById(@Param() params) {
-    return this.messsagesService.findById(+params.id).catch((e) => {
+  findById(@Param("id", ParseIntPipe) id: number) {
+    return this.messsagesService.findById(id).catch((e) => {
       throw new NotFoundException(e.message);
     });
   }
@@ -24,15 +24,15 @@ export class MessagesController {
   }
 
   @Put(":id")
-  update(@Param() params, @Body() messageDto: MessageDto) {
-    return this.messsagesService.update(+params.id, messageDto).catch((e) => {
+  update(@Param("id", ParseIntPipe) id: number, @Body() messageDto: MessageDto) {
+    return this.messsagesService.update(id, messageDto).catch((e) => {
       throw new NotFoundException(e.message);
     });
   }
 
   @Delete(":id")
-  delete(@Param() params) {
-    return this.messsagesService.delete(+params.id).catch((e) => {
+  delete(@Param("id", ParseIntPipe) id: number) {
+    return this.messsagesService.delete(id).catch((e) => {
       throw new NotFoundException(e.message);
     });
   }
